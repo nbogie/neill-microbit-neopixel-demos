@@ -1,20 +1,24 @@
 let mode = ""
 let lightStrip: neopixel.Strip = null
-radio.onDataPacketReceived( ({ receivedNumber }) =>  {
+radio.onDataPacketReceived(({ receivedNumber }) => {
     lightStrip.showBarGraph(receivedNumber, 255)
 })
 // for testing
 input.onButtonPressed(Button.B, () => {
     radio.sendNumber(Math.random(256))
 })
+// for testing
+input.onButtonPressed(Button.A, () => {
+    lightStrip.showBarGraph(Math.random(255), 255)
+})
 radio.setGroup(35)
 lightStrip = neopixel.create(DigitalPin.P0, 100, NeoPixelMode.RGBW)
 lightStrip.showBarGraph(255, 255)
 basic.pause(500)
 if (input.buttonIsPressed(Button.A)) {
-    mode = "tx"
-} else {
     mode = "rx"
+} else {
+    mode = "tx"
 }
 basic.showString(mode)
 basic.showLeds(`
@@ -32,7 +36,7 @@ basic.forever(() => {
     if (mode == "tx") {
         radio.sendNumber(input.lightLevel())
     } else {
-    	
+
     }
     basic.pause(100)
 })
