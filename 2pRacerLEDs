@@ -1,78 +1,44 @@
 let lastPixelNumber = 0
+let raceDuration = 0
 let numPixels = 0
-let p2Colour = 0
 let winnerColour = 0
+let p2Colour = 0
 let movementStep = 0
-let p1Colour = 0
 let loserStrip: neopixel.Strip = null
+let p1Colour = 0
 let p2Pos = 0
 let strip2: neopixel.Strip = null
 let defaultBrightness = 0
 let strip1: neopixel.Strip = null
-let p1Pos = 0
+let raceStartTime = 0
 let winnerStrip: neopixel.Strip = null
-let elapsedTime = 0
+let p1Pos = 0
 let p1Hue = 0
-let p2Hue = 0
 let winnerId = 0
+let p2Hue = 0
 let raceState = ""
-function pulseTrafficLight() {
-    strip1.clear()
-    strip2.clear()
-    for (let index = 0; index <= numPixels / 3; index++) {
-        strip1.setPixelColor(numPixels / 2 - index, trafficLightColour)
-        strip1.setPixelColor(numPixels / 2 + index, trafficLightColour)
-        strip1.show()
-        strip2.setPixelColor(numPixels / 2 - index, trafficLightColour)
-        strip2.setPixelColor(numPixels / 2 + index, trafficLightColour)
-        strip2.show()
-        // buggy library RGBW impl with ranges?
-        // strip1.range(numPixels / 2 - index, 2 *
-        // index).showColor(trafficLightColour)
-        // strip2.range(numPixels / 2 - index, 2 *
-        // index).showColor(trafficLightColour)
-        basic.pause(2)
-    }
-}
-function startRacePressed() {
-    if (raceState == "choosingColours") {
-        startCountdown()
-    }
-}
 input.onButtonPressed(Button.B, () => {
     radio.sendNumber(102)
     p2Pressed()
 })
-input.onButtonPressed(Button.A, () => {
-    radio.sendNumber(101)
-    p1Pressed()
-})
-function raceStarted() {
-    raceState = "running"
-    elapsedTime = 0
-    p1Pos = 1
-    p2Pos = 1
-    showPlayer1()
-    showPlayer2()
-}
-function winAsP1() {
-    winnerId = 1
-    winnerStrip = strip1
-    loserStrip = strip2
-    winnerColour = p1Colour
-    radio.sendNumber(31)
-    winRace()
-}
 function cycleP2Hue() {
     p2Hue += 2
     if (p2Hue >= 360) {
         p2Hue = 0
     }
 }
-input.onGesture(Gesture.Shake, () => {
-    radio.sendNumber(130)
-    startRacePressed()
+input.onButtonPressed(Button.A, () => {
+    radio.sendNumber(101)
+    p1Pressed()
 })
+function choosingColours() {
+    raceState = "choosingColours"
+    p1Pos = 0
+    p2Pos = 0
+    radio.sendNumber(5)
+    showPlayer1()
+    showPlayer2()
+}
 function handleChangingColoursFrame() {
     if (input.buttonIsPressed(Button.A)) {
         cycleP1Hue()
@@ -88,25 +54,31 @@ function handleChangingColoursFrame() {
         startRacePressed()
     }
 }
-function choosingColours() {
-    raceState = "choosingColours"
-    p1Pos = 0
-    p2Pos = 0
-    radio.sendNumber(5)
+input.onGesture(Gesture.Shake, () => {
+    radio.sendNumber(130)
+    startRacePressed()
+})
+function winAsP1() {
+    winnerId = 1
+    winnerStrip = strip1
+    loserStrip = strip2
+    winnerColour = p1Colour
+    radio.sendNumber(31)
+    winRace()
+}
+function raceStarted() {
+    raceState = "running"
+    raceStartTime = input.runningTime()
+    p1Pos = 1
+    p2Pos = 1
     showPlayer1()
     showPlayer2()
 }
-radio.onDataPacketReceived(({ receivedNumber }) => {
-    if (receivedNumber == 101) {
-        p1Pressed()
-    } else if (receivedNumber == 102) {
-        p2Pressed()
-    } else if (receivedNumber == 130) {
-        startRacePressed()
-    } else {
-
+function startRacePressed() {
+    if (raceState == "choosingColours") {
+        startCountdown()
     }
-})
+}
 function startCountdown() {
     raceState = "countdown"
     radio.sendNumber(10)
@@ -128,32 +100,73 @@ function startCountdown() {
     radio.sendNumber(20)
     raceStarted()
 }
-function p2Pressed() {
+function cycleP1Hue() {
+    p1Hue += 2
+    if (p1Hue >= 360) {
+        p1Hue = 0
+    }
+}
+function winAsP2() {
+    winnerId = 2
+    winnerStrip = strip2
+    loserStrip = strip1
+    winnerColour = p2Colour
+    radio.sendNumber(32)
+    winRace()
+}
+function showPlayer1() {
+    strip1.setBrightness(defaultBrightness)
+    strip1.clear()
+    strip1.setPixelColor(p1Pos, neopixel.hsl(p1Hue, 99, 50))
+    if (p1Pos >= 1) {
+        strip1.setPixelColor(p1Pos - 1, neopixel.hsl(p1Hue, 99, 8))
+    }
+    if (p1Pos >= 2) {
+        strip1.setPixelColor(p1Pos - 2, neopixel.hsl(p1Hue, 99, 2))
+    }
+    strip1.show()
+}
+function showPlayer2() {
+    strip2.setBrightness(defaultBrightness)
+    strip2.clear()
+    strip2.setPixelColor(p2Pos, neopixel.hsl(p2Hue, 99, 50))
+    if (p2Pos >= 1) {
+        strip2.setPixelColor(p2Pos - 1, neopixel.hsl(p2Hue, 99, 8))
+    }
+    if (p2Pos >= 2) {
+        strip2.setPixelColor(p2Pos - 2, neopixel.hsl(p2Hue, 99, 2))
+    }
+    strip2.show()
+}
+radio.onDataPacketReceived(({ receivedNumber }) => {
+    if (receivedNumber == 101) {
+        p1Pressed()
+    } else if (receivedNumber == 102) {
+        p2Pressed()
+    } else if (receivedNumber == 130) {
+        startRacePressed()
+    } else {
+
+    }
+})
+function p1Pressed() {
     if (raceState == "running") {
-        radio.sendNumber(2)
-        p2Pos += movementStep
-        showPlayer2()
-        if (p2Pos >= lastPixelNumber) {
-            winAsP2()
+        radio.sendNumber(1)
+        p1Pos += movementStep
+        showPlayer1()
+        if (p1Pos >= lastPixelNumber) {
+            winAsP1()
         }
     } else if (raceState == "choosingColours") {
 
     } else {
-        radio.sendNumber(102)
+        radio.sendNumber(201)
     }
 }
-function fadeUNUSED() {
-    for (let ix2 = 0; ix2 <= 255; ix2++) {
-        strip1.setBrightness(255 - ix2)
-        strip2.setBrightness(255 - ix2)
-        strip1.rotate(1)
-        strip2.rotate(1)
-        strip1.show()
-        strip2.show()
-        basic.pause(10)
-    }
-    strip1.setBrightness(defaultBrightness)
-    strip2.setBrightness(defaultBrightness)
+function winRace() {
+    raceState = "ended"
+    raceDuration = input.runningTime() - raceStartTime
+    runEndOfRaceAnims()
 }
 function runEndOfRaceAnims() {
     winnerStrip.setBrightness(defaultBrightness)
@@ -184,60 +197,36 @@ function runEndOfRaceAnims() {
 input.onPinPressed(TouchPin.P2, () => {
     p1Pressed()
 })
-function winRace() {
-    raceState = "ended"
-    runEndOfRaceAnims()
-}
-function showPlayer1() {
-    strip1.setBrightness(defaultBrightness)
-    strip1.clear()
-    strip1.setPixelColor(p1Pos, neopixel.hsl(p1Hue, 99, 50))
-    if (p1Pos >= 1) {
-        strip1.setPixelColor(p1Pos - 1, neopixel.hsl(p1Hue, 99, 8))
-    }
-    if (p1Pos >= 2) {
-        strip1.setPixelColor(p1Pos - 2, neopixel.hsl(p1Hue, 99, 2))
-    }
-    strip1.show()
-}
-function showPlayer2() {
-    strip2.setBrightness(defaultBrightness)
-    strip2.clear()
-    strip2.setPixelColor(p2Pos, neopixel.hsl(p2Hue, 99, 50))
-    if (p2Pos >= 1) {
-        strip2.setPixelColor(p2Pos - 1, neopixel.hsl(p2Hue, 99, 8))
-    }
-    if (p2Pos >= 2) {
-        strip2.setPixelColor(p2Pos - 2, neopixel.hsl(p2Hue, 99, 2))
-    }
-    strip2.show()
-}
-function winAsP2() {
-    winnerId = 2
-    winnerStrip = strip2
-    loserStrip = strip1
-    winnerColour = p2Colour
-    radio.sendNumber(32)
-    winRace()
-}
-function cycleP1Hue() {
-    p1Hue += 2
-    if (p1Hue >= 360) {
-        p1Hue = 0
-    }
-}
-function p1Pressed() {
+function p2Pressed() {
     if (raceState == "running") {
-        radio.sendNumber(1)
-        p1Pos += movementStep
-        showPlayer1()
-        if (p1Pos >= lastPixelNumber) {
-            winAsP1()
+        radio.sendNumber(2)
+        p2Pos += movementStep
+        showPlayer2()
+        if (p2Pos >= lastPixelNumber) {
+            winAsP2()
         }
     } else if (raceState == "choosingColours") {
 
     } else {
-        radio.sendNumber(201)
+        radio.sendNumber(102)
+    }
+}
+function pulseTrafficLight() {
+    strip1.clear()
+    strip2.clear()
+    for (let index = 0; index <= numPixels / 3; index++) {
+        strip1.setPixelColor(numPixels / 2 - index, trafficLightColour)
+        strip1.setPixelColor(numPixels / 2 + index, trafficLightColour)
+        strip1.show()
+        strip2.setPixelColor(numPixels / 2 - index, trafficLightColour)
+        strip2.setPixelColor(numPixels / 2 + index, trafficLightColour)
+        strip2.show()
+        // buggy library RGBW impl with ranges?
+        // strip1.range(numPixels / 2 - index, 2 *
+        // index).showColor(trafficLightColour)
+        // strip2.range(numPixels / 2 - index, 2 *
+        // index).showColor(trafficLightColour)
+        basic.pause(2)
     }
 }
 let trafficLightColour = 0
@@ -256,6 +245,7 @@ p2Colour = neopixel.hsl(p2Hue, 99, 50)
 trafficLightColour = NeoPixelColors.Red
 strip1 = neopixel.create(DigitalPin.P0, numPixels, NeoPixelMode.RGBW)
 strip2 = neopixel.create(DigitalPin.P1, numPixels, NeoPixelMode.RGBW)
+raceDuration = 0
 radio.sendNumber(0)
 strip1.setPixelColor(p1Pos, p1Colour)
 strip1.show()
@@ -270,7 +260,6 @@ basic.showString("*race2p ch21", 50)
 basic.forever(() => {
     if (raceState == "running") {
         basic.pause(90)
-        elapsedTime += 100
     } else {
         if (raceState == "choosingColours") {
             handleChangingColoursFrame()
