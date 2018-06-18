@@ -61,3 +61,18 @@ Radio messages are sent and received on radio group 21
 * make a remote control for the game, using microbit's a, b, shake, etc.
 * make a remote control with kitchen foil and cardboard
 * make your own race game - perhaps against the clock, initially.
+
+
+# 2pRacer Sound Module
+## What is it?
+This is an extension to the 2p racer game which adds sound effects by listening for and interpreting the game events sent via radio by the core game.  This demo makes sounds just by playing tones or triggering melodies.
+
+## Where's the code?
+[2pRacerRxSndPlayer.js](2pRacerRxSndPlayer.js)
+
+#2p Racer Controller
+## What is it?
+A demo of a controller (for two players) for the 2pRacerLEDs game, with buttons to start game, move player 1, and move player 2.
+
+## Where's the code?
+[2pRacerTxController.js](2pRacerTxController.js)
