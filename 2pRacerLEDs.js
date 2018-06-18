@@ -1,5 +1,4 @@
 let lastPixelNumber = 0
-let raceDuration = 0
 let numPixels = 0
 let winnerColour = 0
 let p2Colour = 0
@@ -7,6 +6,7 @@ let movementStep = 0
 let loserStrip: neopixel.Strip = null
 let p1Colour = 0
 let p2Pos = 0
+let raceDuration = 0
 let strip2: neopixel.Strip = null
 let defaultBrightness = 0
 let strip1: neopixel.Strip = null
@@ -15,8 +15,8 @@ let winnerStrip: neopixel.Strip = null
 let p1Pos = 0
 let p1Hue = 0
 let winnerId = 0
-let p2Hue = 0
 let raceState = ""
+let p2Hue = 0
 input.onButtonPressed(Button.B, () => {
     radio.sendNumber(102)
     p2Pressed()
@@ -106,6 +106,22 @@ function cycleP1Hue() {
         p1Hue = 0
     }
 }
+function p2Pressed() {
+    if (raceState == "running") {
+        radio.sendNumber(2)
+        p2Pos += movementStep
+        showPlayer2()
+        if (p2Pos >= lastPixelNumber) {
+            winAsP2()
+        }
+    } else if (raceState == "choosingColours") {
+        for (let i = 0; i < 5; i++) {
+            cycleP2Hue()
+        }
+    } else {
+        radio.sendNumber(102)
+    }
+}
 function winAsP2() {
     winnerId = 2
     winnerStrip = strip2
@@ -113,60 +129,6 @@ function winAsP2() {
     winnerColour = p2Colour
     radio.sendNumber(32)
     winRace()
-}
-function showPlayer1() {
-    strip1.setBrightness(defaultBrightness)
-    strip1.clear()
-    strip1.setPixelColor(p1Pos, neopixel.hsl(p1Hue, 99, 50))
-    if (p1Pos >= 1) {
-        strip1.setPixelColor(p1Pos - 1, neopixel.hsl(p1Hue, 99, 8))
-    }
-    if (p1Pos >= 2) {
-        strip1.setPixelColor(p1Pos - 2, neopixel.hsl(p1Hue, 99, 2))
-    }
-    strip1.show()
-}
-function showPlayer2() {
-    strip2.setBrightness(defaultBrightness)
-    strip2.clear()
-    strip2.setPixelColor(p2Pos, neopixel.hsl(p2Hue, 99, 50))
-    if (p2Pos >= 1) {
-        strip2.setPixelColor(p2Pos - 1, neopixel.hsl(p2Hue, 99, 8))
-    }
-    if (p2Pos >= 2) {
-        strip2.setPixelColor(p2Pos - 2, neopixel.hsl(p2Hue, 99, 2))
-    }
-    strip2.show()
-}
-radio.onDataPacketReceived(({ receivedNumber }) => {
-    if (receivedNumber == 101) {
-        p1Pressed()
-    } else if (receivedNumber == 102) {
-        p2Pressed()
-    } else if (receivedNumber == 130) {
-        startRacePressed()
-    } else {
-
-    }
-})
-function p1Pressed() {
-    if (raceState == "running") {
-        radio.sendNumber(1)
-        p1Pos += movementStep
-        showPlayer1()
-        if (p1Pos >= lastPixelNumber) {
-            winAsP1()
-        }
-    } else if (raceState == "choosingColours") {
-
-    } else {
-        radio.sendNumber(201)
-    }
-}
-function winRace() {
-    raceState = "ended"
-    raceDuration = input.runningTime() - raceStartTime
-    runEndOfRaceAnims()
 }
 function runEndOfRaceAnims() {
     winnerStrip.setBrightness(defaultBrightness)
@@ -194,22 +156,64 @@ function runEndOfRaceAnims() {
     }
     choosingColours()
 }
+radio.onDataPacketReceived(({ receivedNumber }) => {
+    if (receivedNumber == 101) {
+        p1Pressed()
+    } else if (receivedNumber == 102) {
+        p2Pressed()
+    } else if (receivedNumber == 130) {
+        startRacePressed()
+    } else {
+
+    }
+})
+function showPlayer1() {
+    strip1.setBrightness(defaultBrightness)
+    strip1.clear()
+    strip1.setPixelColor(p1Pos, neopixel.hsl(p1Hue, 99, 50))
+    if (p1Pos >= 1) {
+        strip1.setPixelColor(p1Pos - 1, neopixel.hsl(p1Hue, 99, 8))
+    }
+    if (p1Pos >= 2) {
+        strip1.setPixelColor(p1Pos - 2, neopixel.hsl(p1Hue, 99, 2))
+    }
+    strip1.show()
+}
+function showPlayer2() {
+    strip2.setBrightness(defaultBrightness)
+    strip2.clear()
+    strip2.setPixelColor(p2Pos, neopixel.hsl(p2Hue, 99, 50))
+    if (p2Pos >= 1) {
+        strip2.setPixelColor(p2Pos - 1, neopixel.hsl(p2Hue, 99, 8))
+    }
+    if (p2Pos >= 2) {
+        strip2.setPixelColor(p2Pos - 2, neopixel.hsl(p2Hue, 99, 2))
+    }
+    strip2.show()
+}
+function p1Pressed() {
+    if (raceState == "running") {
+        radio.sendNumber(1)
+        p1Pos += movementStep
+        showPlayer1()
+        if (p1Pos >= lastPixelNumber) {
+            winAsP1()
+        }
+    } else if (raceState == "choosingColours") {
+        for (let i = 0; i < 5; i++) {
+            cycleP1Hue()
+        }
+    } else {
+        radio.sendNumber(201)
+    }
+}
 input.onPinPressed(TouchPin.P2, () => {
     p1Pressed()
 })
-function p2Pressed() {
-    if (raceState == "running") {
-        radio.sendNumber(2)
-        p2Pos += movementStep
-        showPlayer2()
-        if (p2Pos >= lastPixelNumber) {
-            winAsP2()
-        }
-    } else if (raceState == "choosingColours") {
-
-    } else {
-        radio.sendNumber(102)
-    }
+function winRace() {
+    raceState = "ended"
+    raceDuration = input.runningTime() - raceStartTime
+    runEndOfRaceAnims()
 }
 function pulseTrafficLight() {
     strip1.clear()
