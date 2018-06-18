@@ -7,6 +7,11 @@ Note that the focus with a demo is not as a code example for the kids.  Simpler 
 * [TugOfWarLEDs - 2player NeoPixel tug-o-war demo](TugOfWarLEDs.md)
 * [Remote Light-Level to NeoPixel BarChart Demo](LightLevelBarChartLEDsTxRxPair.md)
 * [SmoothRacerDemo - prototype smoother racing demo](SmoothRacerDemo.md)
+* [ColourMatchInvadersLEDs](ColourMatchInvadersLEDs.md)
+
+## Javascript on micro:bit?
+These '.js' source files are from the makecode (javascript/block) editor for micro:bit.  To recreate these projects if an up-to-date .hex file or makecode project is not available, you'll need to make a new project on makecode, install the neopixel library, switch to javascript view, and paste the '.js' code from here.
+
 
 #### Notes about GitHub Pages (for Neill)
 
