@@ -64,13 +64,19 @@ Radio messages are sent and received on radio group 21
 
 
 # 2pRacer Sound Module
+
 ## What is it?
 This is an extension to the 2p racer game which adds sound effects by listening for and interpreting the game events sent via radio by the core game.  This demo makes sounds just by playing tones or triggering melodies.
 
-# 2pRacer Remote Controller
-
 ## Where's the code?
 [2pRacerRxSndPlayer.js](2pRacerRxSndPlayer.js)
+
+## Challenges
+* Make your own version of this module
+* Have a different melody played when each player wins
+* Code in micropython and use text-to-speech to SAY "Ready, Steady, Go!"
+
+# 2pRacer Remote Controller
 
 ## What is it?
 A demo of a controller (for two players) for the 2pRacerLEDs game, with buttons to start game, move player 1, and move player 2.
