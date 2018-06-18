@@ -5,7 +5,11 @@ Note that the focus with a demo is not as a code example for the kids.  Simpler 
 
 ## 2p Racer LEDs
 
+### What is it? 
 This is a simple 2-player racing game on to separate strips of NeoPixels (60 pixels each works well).
+### Where's the code?
+2pRacerLEDs.js
+
 
 ### Controls:
 #### During pre-game:
@@ -52,6 +56,16 @@ Radio messages are sent and received on radio group 21
 | 121  | stop p1 colour cycling    |
 | 122  | stop p2 colour cycling    |
 | 130  | remote button prss of "start game" |
+
+### Challenges for 2p Racer LEDs
+
+* make sound for the game by receiving an interpreting radio messages
+* * using micropython: say "ready, steady, go",  (remember to cut off the start of makecode-origin radio bytes before interpreting as numbers) (femi did this for me at Science Museum's first CoderDojo)
+* make a remote control for the game, using microbit's a, b, shake, etc.
+* make a remote control with kitchen foil and cardboard
+* make your own race game - perhaps against the clock, initially.
+
+
 
 ## Notes about GitHub Pages (for Neill)
 
