@@ -35,6 +35,8 @@ Radio messages are sent and received on radio group 21
 | 12   | amber light (steady)      |
 | 13   | green light (go!)         |
 | 20   | race started              |
+| 21   | p1 is winning             |
+| 22   | p2 is winning             |
 | 31   | p1 wins                   |
 | 32   | p2 wins                   |
 | 201  | p1 button pressed before race started |
