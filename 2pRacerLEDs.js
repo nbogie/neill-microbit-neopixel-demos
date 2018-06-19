@@ -17,7 +17,7 @@ let p1Hue = 0
 let winnerId = 0
 let raceState = ""
 let p2Hue = 0
-function winAsP2()  {
+function winAsP2() {
     winnerId = 2
     winnerStrip = strip2
     loserStrip = strip1
@@ -25,7 +25,7 @@ function winAsP2()  {
     radio.sendNumber(32)
     winRace()
 }
-function cycleP2Hue()  {
+function cycleP2Hue() {
     p2Hue += 2
     if (p2Hue >= 360) {
         p2Hue = 0
@@ -35,7 +35,7 @@ input.onButtonPressed(Button.A, () => {
     radio.sendNumber(101)
     p1Pressed()
 })
-function choosingColours()  {
+function choosingColours() {
     raceState = "choosingColours"
     p1Pos = 0
     p2Pos = 0
@@ -43,7 +43,7 @@ function choosingColours()  {
     showPlayer1()
     showPlayer2()
 }
-function handleChangingColoursFrame()  {
+function handleChangingColoursFrame() {
     if (input.buttonIsPressed(Button.A)) {
         cycleP1Hue()
         p1Colour = neopixel.hsl(p1Hue, 99, 50)
@@ -62,7 +62,7 @@ input.onGesture(Gesture.Shake, () => {
     radio.sendNumber(130)
     startRacePressed()
 })
-function winAsP1()  {
+function winAsP1() {
     winnerId = 1
     winnerStrip = strip1
     loserStrip = strip2
@@ -70,7 +70,7 @@ function winAsP1()  {
     radio.sendNumber(31)
     winRace()
 }
-function raceStarted()  {
+function raceStarted() {
     raceState = "running"
     raceStartTime = input.runningTime()
     p1Pos = 1
@@ -78,33 +78,33 @@ function raceStarted()  {
     showPlayer1()
     showPlayer2()
 }
-function startRacePressed()  {
+function startRacePressed() {
     if (raceState == "choosingColours") {
         startCountdown()
     }
 }
-function startCountdown()  {
+function startCountdown() {
     raceState = "countdown"
     radio.sendNumber(10)
     basic.pause(1000)
     strip1.setBrightness(defaultBrightness)
     strip2.setBrightness(defaultBrightness)
     trafficLightColour = NeoPixelColors.Red
-pulseTrafficLight()
+    pulseTrafficLight()
     radio.sendNumber(11)
     basic.pause(1000)
     trafficLightColour = NeoPixelColors.Orange
-pulseTrafficLight()
+    pulseTrafficLight()
     radio.sendNumber(12)
     basic.pause(1000)
     trafficLightColour = NeoPixelColors.Green
-pulseTrafficLight()
+    pulseTrafficLight()
     radio.sendNumber(13)
     basic.pause(1000)
     radio.sendNumber(20)
     raceStarted()
 }
-function cycleP1Hue()  {
+function cycleP1Hue() {
     p1Hue += 2
     if (p1Hue >= 360) {
         p1Hue = 0
@@ -114,7 +114,7 @@ input.onButtonPressed(Button.B, () => {
     radio.sendNumber(102)
     p2Pressed()
 })
-function p2Pressed()  {
+function p2Pressed() {
     if (raceState == "running") {
         radio.sendNumber(2)
         p2Pos += movementStep
@@ -130,7 +130,7 @@ function p2Pressed()  {
         radio.sendNumber(102)
     }
 }
-function runEndOfRaceAnims()  {
+function runEndOfRaceAnims() {
     winnerStrip.setBrightness(defaultBrightness)
     loserStrip.setBrightness(defaultBrightness)
     loserStrip.clear()
@@ -156,7 +156,7 @@ function runEndOfRaceAnims()  {
     }
     choosingColours()
 }
-radio.onDataPacketReceived( ({ receivedNumber }) =>  {
+radio.onDataPacketReceived(({ receivedNumber }) => {
     if (receivedNumber == 101) {
         p1Pressed()
     } else if (receivedNumber == 102) {
@@ -164,10 +164,10 @@ radio.onDataPacketReceived( ({ receivedNumber }) =>  {
     } else if (receivedNumber == 130) {
         startRacePressed()
     } else {
-    	
+
     }
 })
-function showPlayer1()  {
+function showPlayer1() {
     strip1.setBrightness(defaultBrightness)
     strip1.clear()
     strip1.setPixelColor(p1Pos, neopixel.hsl(p1Hue, 99, 50))
@@ -179,7 +179,7 @@ function showPlayer1()  {
     }
     strip1.show()
 }
-function announceLeader()  {
+function announceLeader() {
     if (p1Pos > p2Pos) {
         radio.sendNumber(21)
     } else if (p1Pos < p2Pos) {
@@ -188,7 +188,7 @@ function announceLeader()  {
         radio.sendNumber(23)
     }
 }
-function showPlayer2()  {
+function showPlayer2() {
     strip2.setBrightness(defaultBrightness)
     strip2.clear()
     strip2.setPixelColor(p2Pos, neopixel.hsl(p2Hue, 99, 50))
@@ -200,7 +200,7 @@ function showPlayer2()  {
     }
     strip2.show()
 }
-function p1Pressed()  {
+function p1Pressed() {
     if (raceState == "running") {
         radio.sendNumber(1)
         p1Pos += movementStep
@@ -221,12 +221,12 @@ function p1Pressed()  {
 input.onPinPressed(TouchPin.P2, () => {
     p1Pressed()
 })
-function winRace()  {
+function winRace() {
     raceState = "ended"
     raceDuration = input.runningTime() - raceStartTime
     runEndOfRaceAnims()
 }
-function pulseTrafficLight()  {
+function pulseTrafficLight() {
     strip1.clear()
     strip2.clear()
     for (let index = 0; index <= numPixels / 3; index++) {
@@ -280,7 +280,7 @@ basic.forever(() => {
             handleChangingColoursFrame()
             basic.pause(10)
         } else {
-        	
+
         }
     }
     basic.pause(10)
