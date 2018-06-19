@@ -37,6 +37,7 @@ Radio messages are sent and received on radio group 21
 | 20   | race started              |
 | 21   | p1 is winning             |
 | 22   | p2 is winning             |
+| 23   | players are tied for lead |
 | 31   | p1 wins                   |
 | 32   | p2 wins                   |
 | 201  | p1 button pressed before race started |
