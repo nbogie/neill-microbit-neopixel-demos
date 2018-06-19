@@ -121,6 +121,8 @@ function p2Pressed() {
         showPlayer2()
         if (p2Pos >= lastPixelNumber) {
             winAsP2()
+        } else {
+            announceLeader()
         }
     } else if (raceState == "choosingColours") {
         for (let i = 0; i < 5; i++) {
