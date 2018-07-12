@@ -1,5 +1,5 @@
 let maxVal = 0
-function calcPeakSample()  {
+function calcPeakSample() {
     maxVal = 0
     for (let sample of samples) {
         if (sample > maxVal) {
@@ -13,11 +13,11 @@ basic.showIcon(IconNames.EigthNote)
 basic.forever(() => {
     samples.push(Math.abs(pins.analogReadPin(AnalogPin.P1) - 512))
     samples.removeAt(0)
-calcPeakSample()
+    calcPeakSample()
 })
 basic.forever(() => {
     led.plotBarGraph(
-    maxVal,
-    256
+        maxVal,
+        256
     )
 })
