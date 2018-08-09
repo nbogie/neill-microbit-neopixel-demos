@@ -39,15 +39,15 @@ function startCountdown()  {
     strip1.setBrightness(defaultBrightness)
     strip2.setBrightness(defaultBrightness)
     trafficLightColour = NeoPixelColors.Red
-pulseTrafficLight()
+    pulseTrafficLight()
     radio.sendNumber(11)
     basic.pause(1000)
     trafficLightColour = NeoPixelColors.Orange
-pulseTrafficLight()
+    pulseTrafficLight()
     radio.sendNumber(12)
     basic.pause(1000)
     trafficLightColour = NeoPixelColors.Green
-pulseTrafficLight()
+    pulseTrafficLight()
     radio.sendNumber(13)
     basic.pause(1000)
     radio.sendNumber(20)
