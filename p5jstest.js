@@ -1,8 +1,15 @@
 var ix = 0;
+var canvas;
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
 
 function setup() {
 	ix = 0;
-	createCanvas(windowWidth, windowHeight);
+	canvas = createCanvas(windowWidth, windowHeight);
+	canvas.position(0, 0);
+	//canvas.style('z-index', '-1');
 	background(0);
 	strokeWeight(4);
 }
