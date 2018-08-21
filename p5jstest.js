@@ -9,8 +9,7 @@ function setup() {
 	ix = 0;
 	canvas = createCanvas(windowWidth, windowHeight);
 	canvas.position(0, 0);
-	//canvas.style('z-index', '-1');
-	background(0);
+	canvas.style('z-index', '-1');
 	strokeWeight(4);
 }
 
@@ -33,6 +32,6 @@ function draw() {
 
 function keyTyped(){
 	if (key === 'c'){
-		background(0);
+		clear();
 	}
 }
