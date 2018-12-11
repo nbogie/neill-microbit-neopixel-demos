@@ -7,8 +7,7 @@ This is a quick experiment mixing space invaders with colour matching.
 
 ## Where's the code?
 
-2pRacerLEDs.js
-
+[ColourMatchInvadersLEDs.js](ColourMatchInvadersLEDs.js)
 
 ## Controls:
 ### During race:
