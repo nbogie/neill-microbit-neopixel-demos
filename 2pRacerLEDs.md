@@ -5,7 +5,7 @@
 ## What is it? 
 This is a simple 2-player racing game on to separate strips of NeoPixels (60 pixels each works well).
 ## Where's the code?
-2pRacerLEDs.js
+[2pRacerLEDs.js](2pRacerLEDs.js)
 
 
 ## Controls:
