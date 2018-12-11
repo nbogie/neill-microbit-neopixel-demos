@@ -1,6 +1,6 @@
 [Back to list of demos](README.md)
 
-# 2p Racer LEDs
+# 2p Racer LEDs and extensions
 
 ## What is it? 
 This is a simple 2-player racing game on to separate strips of NeoPixels (60 pixels each works well).
