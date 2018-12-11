@@ -9,6 +9,8 @@ This is a very simple to implement demo which uses two microbits.  One microbit 
 
 ## Where's the code?
 
+[LightLevelBarChartLEDsTxRxPair.js](LightLevelBarChartLEDsTxRxPair.js)
+
 ## Hardware Build instructions
 
 ## Instructions for use
